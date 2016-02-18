@@ -1,0 +1,59 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/jdbc     
+        http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<jdbc:embedded-database id="dataSource" type="HSQL">
+		<jdbc:script location="WEB-INF/classes/db/sql/create-db.sql" />
+		<jdbc:script location="WEB-INF/classes/db/sql/insert-data.sql" />
+	</jdbc:embedded-database>
+
+
+        <bean id="users" class="com.epam.spring.core.htask.cinema.data.dao.db.UserDaoImpl" >
+            <property name="jdbcTemplate" ref="jdbcTemplate" />
+        </bean>
+	
+        <bean id="auditoriums" class="com.epam.spring.core.htask.cinema.data.dao.db.AuditoriumDaoImpl" >
+            <property name="jdbcTemplate" ref="jdbcTemplate" />
+        </bean>
+            
+        <bean id="events" class="com.epam.spring.core.htask.cinema.data.dao.db.EventDaoImpl">
+            <constructor-arg ref="jdbcTemplate"/>
+            <constructor-arg ref="auditoriums"/>
+        </bean>
+        
+        <bean id="tickets" class="com.epam.spring.core.htask.cinema.data.dao.db.TicketDaoImpl">
+            <constructor-arg ref="jdbcTemplate"/>
+            <property name="users" ref="users" />
+            <property name="events" ref="events" />
+        </bean>
+        
+        
+        <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" >    
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<!-- Start Hsql database manager tool -->
+	<bean depends-on="dataSource"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.hsqldb.util.DatabaseManagerSwing" />
+		<property name="targetMethod" value="main" />
+		<property name="arguments">
+			<list>
+				<value>--url</value>
+				<value>jdbc:hsqldb:mem:dataSource</value>
+				<value>--user</value>
+				<value>sa</value>
+				<value>--password</value>
+				<value></value>
+			</list>
+		</property>
+	</bean>
+</beans>

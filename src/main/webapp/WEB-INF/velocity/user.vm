@@ -1,0 +1,13 @@
+<html>
+ <head><title>Users</title></head>
+ <body>
+ <h2>Users:</h2>
+ <ul>
+    #foreach($user in $users) <!-- Итерации по элементам списка -->
+     <li> ${user.id} -- 
+     ${user.name} --
+     ${user.dateBirth}</li>
+    #end
+ </ul>
+ </body>
+</html>

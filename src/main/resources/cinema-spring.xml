@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+ 		http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                http://www.springframework.org/schema/aop
+ 		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+                http://www.springframework.org/schema/util
+ 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+    
+    
+  
+    <import resource="aop.xml"/>
+    <import resource="jdbc-config.xml"/>
+
+    <bean id="discountBirthDay" class="com.epam.spring.core.htask.cinema.data.discount.DiscountBirthDay">
+        <property name="percent" value="5"/>
+    </bean>
+    
+    <bean id="discountAfter10Tickets" class="com.epam.spring.core.htask.cinema.data.discount.DiscountAfter10Tickets">
+        <property name="percent" value="10"/>
+    </bean>
+
+    <util:list id="listDiscounts">
+        <ref bean="discountBirthDay"/>
+        <ref bean="discountAfter10Tickets"/>
+    </util:list>
+
+    <bean id="discountService" class="com.epam.spring.core.htask.cinema.services.DiscountService">
+        <constructor-arg ref="listDiscounts"/>
+    </bean>
+
+    <bean id="bookingService" class="com.epam.spring.core.htask.cinema.services.BookingService">
+        <property name="discountService" ref="discountService"/>
+        <property name="tickets" ref="tickets"/>
+    </bean>
+
+    <bean id="app" class="com.epam.spring.core.htask.cinema.App"> 
+        <constructor-arg ref="users"/>
+        <constructor-arg ref="auditoriums"/>
+        <constructor-arg ref="events"/>
+        <constructor-arg ref="tickets"/>
+        <property name="bookingService" ref="bookingService"/>
+        <property name="discountService" ref="discountService"/>
+    </bean>
+    
+      
+</beans>

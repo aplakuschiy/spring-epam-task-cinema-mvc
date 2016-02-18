@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+   <meta charset="utf-8">
+  <title>EPAM SpringMVC</title>
+ </head>
+ <body>
+    <h1>Select:</h1>
+  <p><a href="cinema/users/getAll">3. Return one or several entites as a result</a></p>
+  <p><a href="cinema/users/getAllPdf">4. Return result as PDF document</a></p>
+  <p><a href="cinema/booking/multipleUpload">5. Upload USERS and EVENTS with JSON files</a></p> 
+  <p><a href="cinema/testException">6. Redirect all controller exceptions to error.vm</a></p> 
+</body>
+</html>
